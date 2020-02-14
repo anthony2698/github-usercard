@@ -24,7 +24,7 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -45,7 +45,77 @@ const followersArray = [];
 </div>
 
 */
+function cardComponent(obj){
+  //Elements
+  const card = document.createElement('div');
+  const img = document.createElement('img');
+  const information = document.createElement('div');
+  const headerName = document.createElement('h3');
+  const userName = document.createElement('p');
+  const location = document.createElement('p');
+  const profile = document.createElement('p');
+  const address = document.createElement('a'); 
+  const followers = document.createElement('p');
+  const following = document.createElement('p');
+  const bio = document.createElement('p');
 
+  //Add Classes
+  card.classList.add('card');
+  information.classList.add('card-info');
+  headerName.classList.add('name');
+  userName.classList.add('username');
+
+  //Text Content
+  img.src = obj.avatar_url;
+  headerName.textContent = obj.name;
+  userName.textContent = obj.login;
+  location.textContent = `Location: ${obj.location}`;
+  profile.innerHTML = `Profile: <a href="${obj.html_url}">${obj.html_url}`;
+  followers.textContent = `Followers: ${obj.followers}`;
+  following.textContent = `Following: ${obj.following}`;
+  bio.textContent = `Bio: ${obj.bio}`;
+
+  //Create Structure
+  card.appendChild(img);
+  card.appendChild(information);
+  information.appendChild(headerName);
+  information.appendChild(userName);
+  information.appendChild(location);
+  information.appendChild(profile);
+  profile.appendChild(address);
+  information.appendChild(followers);
+  information.appendChild(following);
+  information.appendChild(bio);
+
+
+  return card;
+}
+
+const cards = document.querySelector('.cards');
+
+axios.get("https://api.github.com/users/anthony2698")
+  .then(response => {
+    console.log(response.data);
+    cards.appendChild(cardComponent(response.data));
+  })
+  .catch(err => {
+    console.log(err);
+  });
+
+  // Using that array, iterate over it, requesting data for each user, creating a new card for each
+  // user, and adding that card to the DOM.
+  const followersArray = ["https://api.github.com/users/ousbayaa", "https://api.github.com/users/dustinmyers", "https://api.github.com/users/justsml", "https://api.github.com/users/tetondan"];
+
+  followersArray.forEach(function(el) {
+    axios.get(el)
+      .then(response => {
+        console.log(response.data);
+        cards.appendChild(cardComponent(response.data));
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
 /* List of LS Instructors Github username's: 
   tetondan
   dustinmyers
